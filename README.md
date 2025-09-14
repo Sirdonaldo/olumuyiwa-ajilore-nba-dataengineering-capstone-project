@@ -3,11 +3,18 @@
 ## 🏀 NBA Data Engineering Capstone Project
 
 ## Overview
-This capstone project demonstrates how to design an end-to-end data engineering pipeline using modern tools. The goal is to show how raw NBA data can be ingested from multiple sources, transformed, validated, and surfaced as actionable insights through dashboards and conversational analytics.
+The NBA generates a massive amount of data every day, from detailed player information to fast-paced in-game events. On its own, this data is scattered, messy, and not very useful for analysis.
 
-This pipeline integrates two different sources and formats:
-- BallDontLie API → static player data (exported to CSV).
-- Confluent Kafka (Cloud) → real-time NBA event stream (JSON).
+The problem this project solves is how to bring all of that raw information together in one place, clean it up, and turn it into something meaningful. By combining player data from the BallDontLie API with live event data streamed through Confluent Kafka, the pipeline creates a single, reliable source of truth that can be explored and analyzed.
+
+The project shows how to:
+- Collect data from different sources in different formats
+- Standardize and join that data so it makes sense together
+- Automate the process with Airflow and Spark so it runs without manual effort
+- Store the results in Databricks for easy access and performance
+- Share insights through dashboards and conversational analytics with Genie
+
+With this setup, anyone from an NBA analyst to a fantasy sports player can quickly answer questions like “Who takes the most three point shots?”, “Which team is most efficient from deep?”, or “Which players dominate in steals and blocks?” without having to dig through unstructured data.
 
 Together, these datasets exceed 1M+ rows, meeting the requirements for scale, variety, and complexity.
 
