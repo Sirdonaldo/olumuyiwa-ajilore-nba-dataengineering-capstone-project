@@ -1,121 +1,134 @@
 # olumuyiwa-ajilore-nba-dataengineering-capstone-project
 
-🏀 NBA Data Engineering Capstone Project
-📌 Overview
+## 🏀 NBA Data Engineering Capstone Project
 
-This project builds an end-to-end data pipeline for NBA player and event data. The pipeline ingests, transforms, and analyzes data using Astronomer (Airflow), Databricks, and Genie, producing actionable insights through automated ETL and dashboards.
+## Overview
+This capstone project demonstrates how to design an end-to-end data engineering pipeline using modern tools. The goal is to show how raw NBA data can be ingested from multiple sources, transformed, validated, and surfaced as actionable insights through dashboards and conversational analytics.
 
-⚙️ Tech Stack
+This pipeline integrates two different sources and formats:
+- BallDontLie API → static player data (exported to CSV).
+- Confluent Kafka (Cloud) → real-time NBA event stream (JSON).
 
-Python / Pandas → Initial validation & schema checks
+Together, these datasets exceed 1M+ rows, meeting the requirements for scale, variety, and complexity.
 
-Apache Airflow (Astronomer Runtime) → ETL orchestration
+## Tech Stack
+- Python / Pandas → data validation, schema checks
+- BallDontLie API → static player data (CSV)
+- Confluent Kafka (Cloud) → streaming NBA events (JSON)
+- Apache Airflow (Astronomer) → ETL orchestration
+- Apache Spark / Databricks → transformations, queries, persistence
+- Databricks Dashboards → visualization of KPIs & insights
+- Databricks Genie → conversational analytics over datasets
 
-Databricks SQL / Spark → Storage, transformations, and queries
-
-Databricks Dashboards → Visualizations (3pt shooting, steals, rebounds, blocks, etc.)
-
-Databricks Genie → Conversational analytics on datasets
-
-📂 Project Structure
+## Project Structure
 ├── data/
-│   ├── players.csv       # Static player data (BallDontLie API export)
-│   └── events.json       # Kafka-exported NBA event data
+│   ├── players.csv       # Exported from BallDontLie API
+│   └── events.json       # Exported from Confluent Kafka stream
 ├── dags/
 │   └── nba_pipeline_dag.py   # Airflow DAG definition
 ├── src/
 │   └── pipelines/
 │       └── etl_pipeline.py   # ETL logic for events + players
 ├── warehouse/             # Iceberg/Parquet storage
-└── README.md              # Project documentation
+└── README.md              # Documentation
 
-🔄 Pipeline Workflow
+## Pipeline Workflow
+1. Ingestion
+   - Fetch NBA player data from BallDontLie API (CSV).
+   - Stream NBA event data from Confluent Kafka Cloud (JSON).
 
-Ingest → Load players.csv (static) and events.json (streaming export).
+2. Transformation
+   - Clean and normalize schema.
+   - Join player metadata with event actions.
 
-Transform → Clean + join events with player metadata.
+3. Orchestration
+   - Automate daily ETL runs using Airflow DAG (Astronomer).
 
-Orchestrate → Airflow DAG runs ETL daily.
+4. Storage
+   - Persist enriched data in Databricks Unity Catalog.
 
-Store → Save enriched events in Databricks (Unity Catalog).
+5. Analytics
+   - Run SQL queries to calculate KPIs.
+   - Build dashboards for visualization.
 
-Analyze → SQL queries power dashboards & Genie insights.
+6. Conversational AI
+   - Deploy Genie to allow natural language exploration.
 
-🚀 How to Run
-1️⃣ Setup
+## SQL Queries Behind the Dashboard
 
-Clone repo:
+Total Events Count:
+SELECT COUNT(*) AS total_events
+FROM tabular.dataexpert.events;
 
-git clone <your_repo>
-cd nba-dataengineering-capstone
+Top 3-Point Attempts:
+SELECT e.value.player, COUNT(*) AS shot_attempts
+FROM tabular.dataexpert.events e
+WHERE e.value.action = '3pt_shot'
+GROUP BY e.value.player
+ORDER BY shot_attempts DESC
+LIMIT 10;
+
+3-Point Shooting Efficiency:
+SELECT 
+  e.value.team,
+  ROUND(100 * SUM(CASE WHEN e.value.outcome = 'made' THEN 1 ELSE 0 END) / COUNT(*), 2) AS success_pct
+FROM tabular.dataexpert.events e
+WHERE e.value.action = '3pt_shot'
+GROUP BY e.value.team
+ORDER BY success_pct DESC;
+
+Top Steals:
+SELECT e.value.player, COUNT(*) AS steals
+FROM tabular.dataexpert.events e
+WHERE e.value.action = 'steal'
+GROUP BY e.value.player
+ORDER BY steals DESC
+LIMIT 10;
+
+Top 10 Blocks:
+SELECT e.value.player, COUNT(*) AS blocks
+FROM tabular.dataexpert.events e
+WHERE e.value.action = 'block'
+GROUP BY e.value.player
+ORDER BY blocks DESC
+LIMIT 10;
+
+Players by Country:
+SELECT country, COUNT(*) AS player_count
+FROM tabular.dataexpert.players
+GROUP BY country
+ORDER BY player_count DESC;
+
+## Visualizations
+
+<img width="1470" height="956" alt="Screenshot 2025-09-13 at 7 53 58 PM" src="https://github.com/user-attachments/assets/55e9e4da-d35c-408a-9b02-26659ba106c5" />
+- KPI cards (total events, total players)
+- 3-point efficiency chart
+- Steals leaderboard
+- Blocks leaderboard
+- Players by country
+- Tabular player-event details
+
+## Genie Demo Questions
+- Who has the most 3-point attempts?
+- Which team has the best shooting efficiency?
+- Show me the top 5 players by steals
+- How many NBA players are from Canada?
+- Who leads in rebounds?
+
+## Deliverables
+- Automated Airflow DAG (Astronomer)
+- ETL pipeline joining players + events
+- Databricks SQL queries for KPIs
+- Dashboards with interactive insights
+- Genie for conversational analytics
+- Documentation (README.md)
+
+## Key Learnings
+- Building a reproducible ETL workflow with Airflow
+- Integrating API + streaming data sources
+- Handling schema alignment between CSV and JSON
+- Persisting and querying data with Databricks
+- Enabling conversational BI with Genie
 
 
-Install dependencies:
-
-pip install -r requirements.txt
-
-2️⃣ Run Airflow DAG (Astronomer)
-astro dev start
-
-
-Access Airflow UI → http://localhost:8081
-
-Enable and trigger nba_pipeline_dag
-
-3️⃣ Databricks Integration
-
-Upload players.csv + events.json to Databricks catalog.
-
-Run SQL queries (see /notebooks).
-
-4️⃣ Dashboards & Genie
-
-Open Databricks → Dashboards → NBA Insights Dashboard
-
-Use Genie → Query datasets in natural language.
-
-📊 Visualizations (Examples)
-
-3-Point Shooting Efficiency by team
-
-Top Steals by player
-
-Top 10 Rebounders (donut chart)
-
-Blocks Leaders
-
-Player counts by country
-
-Total event volume (KPI card)
-
-(Insert screenshots here)
-
-🤖 Genie Insights
-
-Examples of natural language queries powered by Genie:
-
-“Who has the most steals?”
-
-“Show me 3-point efficiency by player.”
-
-“How many players are from Canada?”
-
-✅ Deliverables
-
-Automated Airflow DAG for ETL
-
-Databricks SQL Dashboard with NBA insights
-
-Genie conversational analytics
-
-Documentation (this README)
-
-🎯 Key Learnings
-
-Building reproducible pipelines with Airflow
-
-Combining static + streaming datasets
-
-Running analytics in Databricks SQL & Dashboards
-
-Enhancing exploration with Genie
