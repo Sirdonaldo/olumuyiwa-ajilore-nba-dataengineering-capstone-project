@@ -53,6 +53,9 @@ Together, these datasets exceed 1M+ rows, meeting the requirements for scale, va
 <img width="1463" height="902" alt="image" src="https://github.com/user-attachments/assets/7af94ee0-fa2e-4637-af47-662c78bcd274" />
 
 ## Pipeline Workflow
+<img width="1467" height="877" alt="Screenshot 2025-09-12 at 11 17 49 PM" src="https://github.com/user-attachments/assets/2c8ff51f-d249-4436-8631-617de047810e" />
+
+
 1. Ingestion
    - Fetch NBA player data from BallDontLie API (CSV).
    - Stream NBA event data from Confluent Kafka Cloud (JSON).
