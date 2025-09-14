@@ -32,67 +32,16 @@ Together, these datasets exceed 1M+ rows, meeting the requirements for scale, va
 ├── warehouse/             # Iceberg/Parquet storage
 └── README.md              # Documentation
 
+## Architecture
+<img width="1021" height="568" alt="Screenshot 2025-09-13 at 9 01 02 PM" src="https://github.com/user-attachments/assets/a50bd122-8e1c-4645-a46d-21c49a7fa1c8" />
+
 ## Data Sources
 <img width="1912" height="1069" alt="image" src="https://github.com/user-attachments/assets/bc6f3357-4bf9-4369-a9bc-06a4aa9c871e" />
 <img width="1908" height="1075" alt="image" src="https://github.com/user-attachments/assets/3b5b4d5b-1b73-494a-bfd3-46c8e2f8b47b" />
 <img width="1912" height="1068" alt="image" src="https://github.com/user-attachments/assets/17d32e7a-4dd8-495a-8846-80a25f565d42" />
 
 ## Schema
-{
-  "$id": "http://example.com/myURI.schema.json",
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "description": "NBA events stream including team, player, action type, outcome, and timestamp",
-  "properties": {
-    "action": {
-      "type": "string"
-    },
-    "outcome": {
-      "oneOf": [
-        {
-          "oneOf": [
-            {
-              "type": "null"
-            },
-            {
-              "type": "string"
-            }
-          ],
-          "type": "null"
-        },
-        {
-          "oneOf": [
-            {
-              "oneOf": [
-                {
-                  "type": "null"
-                },
-                {
-                  "type": "string"
-                }
-              ],
-              "type": "null"
-            },
-            {
-              "type": "string"
-            }
-          ],
-          "type": "string"
-        }
-      ]
-    },
-    "player": {
-      "type": "string"
-    },
-    "team": {
-      "type": "string"
-    },
-    "timestamp": {
-      "type": "string"
-    }
-  },
-  "title": "SampleRecord",
-  "type": "object"
-}
+<img width="1463" height="902" alt="image" src="https://github.com/user-attachments/assets/7af94ee0-fa2e-4637-af47-662c78bcd274" />
 
 ## Pipeline Workflow
 1. Ingestion
