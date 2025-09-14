@@ -22,14 +22,23 @@ Together, these datasets exceed 1M+ rows, meeting the requirements for scale, va
 
 ## Project Structure
 ├── data/
+
 │   ├── players.csv       # Exported from BallDontLie API
+
 │   └── events.json       # Exported from Confluent Kafka stream
+
 ├── dags/
+
 │   └── nba_pipeline_dag.py   # Airflow DAG definition
+
 ├── src/
+
 │   └── pipelines/
+
 │       └── etl_pipeline.py   # ETL logic for events + players
+
 ├── warehouse/             # Iceberg/Parquet storage
+
 └── README.md              # Documentation
 
 ## Architecture
@@ -65,13 +74,13 @@ Together, these datasets exceed 1M+ rows, meeting the requirements for scale, va
 6. Conversational AI
    - Deploy Genie to allow natural language exploration.
 
-## SQL Queries Behind the Dashboard
+## KPI's / SQL Queries Behind the Dashboard 
 
-Total Events Count:
+## Total Events Count:
 SELECT COUNT(*) AS total_events
 FROM tabular.dataexpert.events;
 
-Top 3-Point Attempts:
+## Top 3-Point Attempts:
 SELECT e.value.player, COUNT(*) AS shot_attempts
 FROM tabular.dataexpert.events e
 WHERE e.value.action = '3pt_shot'
@@ -79,7 +88,7 @@ GROUP BY e.value.player
 ORDER BY shot_attempts DESC
 LIMIT 10;
 
-3-Point Shooting Efficiency:
+## 3-Point Shooting Efficiency:
 SELECT 
   e.value.team,
   ROUND(100 * SUM(CASE WHEN e.value.outcome = 'made' THEN 1 ELSE 0 END) / COUNT(*), 2) AS success_pct
@@ -88,7 +97,7 @@ WHERE e.value.action = '3pt_shot'
 GROUP BY e.value.team
 ORDER BY success_pct DESC;
 
-Top Steals:
+## Top Steals:
 SELECT e.value.player, COUNT(*) AS steals
 FROM tabular.dataexpert.events e
 WHERE e.value.action = 'steal'
@@ -96,7 +105,7 @@ GROUP BY e.value.player
 ORDER BY steals DESC
 LIMIT 10;
 
-Top 10 Blocks:
+## Top 10 Blocks:
 SELECT e.value.player, COUNT(*) AS blocks
 FROM tabular.dataexpert.events e
 WHERE e.value.action = 'block'
@@ -104,7 +113,7 @@ GROUP BY e.value.player
 ORDER BY blocks DESC
 LIMIT 10;
 
-Players by Country:
+## Players by Country:
 SELECT country, COUNT(*) AS player_count
 FROM tabular.dataexpert.players
 GROUP BY country
