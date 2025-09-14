@@ -161,4 +161,17 @@ ORDER BY player_count DESC;
 - Persisting and querying data with Databricks
 - Enabling conversational BI with Genie
 
+## Data Quality Checks
+- To ensure data integrity, the following quality checks were applied before transformation:
+- Schema validation → confirmed that required fields (team, player, action, outcome, timestamp) exist in events.json and (id, first_name, last_name, team_abbreviation) exist in players.csv.
+- Null checks → verified that no critical fields (player names, event actions) are missing.
+- Duplicate detection → ensured duplicate rows were removed to prevent double-counting in KPIs.
+- These checks guaranteed that the enriched dataset maintained consistency and accuracy across both sources.
+
+## Future Project Improvements
+## Potential improvements and extensions for this project include:
+- Real-time streaming: converting the batch ingestion pipeline into a continuous streaming job for near real-time analytics.
+- Machine learning integration: using enriched datasets to predict player performance trends (e.g., expected 3-point efficiency).
+- API exposure: publishing cleaned analytics tables as a REST API for external consumers or sports applications.
+- Scalability enhancements: deploying to a cloud data warehouse (e.g., Snowflake or BigQuery) for broader analytics at scale.
 
