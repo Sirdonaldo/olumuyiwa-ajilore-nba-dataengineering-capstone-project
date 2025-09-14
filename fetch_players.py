@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 from collections import defaultdict
 
-# Optional API key (BallDontLie doesn’t actually require one, but include if you have it)
+
 API_KEY = "ef5b1a42-1ebf-4722-9338-196f5ba9a527"
 BASE_URL = "https://api.balldontlie.io/v1/players"
 
